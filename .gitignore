@@ -36,3 +36,7 @@ lerna-debug.log*
 
 #external
 /external
+
+# env
+.env
+.env.local

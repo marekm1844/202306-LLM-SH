@@ -9,7 +9,6 @@ export class VectorStoreRepository {
   constructor(
     @Inject('ChromaDBVectorStore')
     private readonly chromaResult: Result<ChromaClient>,
-    private readonly url: string,
     private readonly apiKey: string,
     private readonly proxyPath: string,
     private readonly enableProxy: boolean,

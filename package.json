@@ -2,9 +2,12 @@
   "name": "202306-llm-conflu-sh",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": "Marek Majdak",
+  "private": false,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
