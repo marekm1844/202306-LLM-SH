@@ -31,7 +31,7 @@ import { VectorStoreRepository } from './vector-store.repository';
         chromaResult: Result<ChromaClient>,
         configService: ConfigService,
       ) => {
-        const apiKey = configService.get<string>('OAPI_KEY');
+        const apiKey = configService.get<string>('OPENAI_API_KEY');
         const proxyPath = configService.get<string>('PROXY_URL');
         const enableProxy = configService.get<boolean>('ENABLE_PROXY');
 

@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { VectorStoreModule } from './vector-store/vector-store.module';
+import { LlmModule } from './llm/llm.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { VectorStoreModule } from './vector-store/vector-store.module';
       envFilePath: ['.env'],
     }),
     VectorStoreModule,
+    LlmModule,
   ],
   controllers: [AppController],
   providers: [AppService],
