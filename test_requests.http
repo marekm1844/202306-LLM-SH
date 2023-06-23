@@ -1,0 +1,10 @@
+curl -H Accept:text/event-stream http://localhost:3000/chat/sse
+
+
+### test
+POST http://localhost:3000/chat/add HTTP/1.1
+content-type: application/json
+
+{
+  "citi": "Warsaw"
+}

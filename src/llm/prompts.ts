@@ -20,6 +20,6 @@ Question: {question}
 Helpful answer in markdown:`);
 
 export const AVG_TEMP_PROMPT = PromptTemplate.fromTemplate(`
-You are a helpful AI weather assistant. Answer the avarege temperature in the last 10 years for {city} during {month}.
+You are a helpful AI weather assistant. Answer the avarege temperature in the last 10 years for {city} during {month} in °C.
 
 Helpful answer in markdown:`);

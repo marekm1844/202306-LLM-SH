@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Bot Client</title>
+  </head>
+
+  <body>
+    <input type="text" id="city" placeholder="Enter your topic here" />
+    <input type="text" id="month" placeholder="Enter your message here" />
+    <button onclick="handleSubmit()">submit</button>
+  </body>
+  <script type="text/javascript">
+    // const history = []
+    let sse = null;
+    const handleSubmit = () => {
+      let responseText = '';
+      const city = document.getElementById('city').value;
+      const month = document.getElementById('month').value;
+      const url = `http://localhost:3000/chat/sse`;
+      if (sse) {
+        sse.close();
+      }
+      sse = new EventSource(url);
+
+      sse.onmessage = (event) => {
+        if (event.data === '\n\n') {
+          sse.close();
+          return;
+        }
+        responseText += event.data;
+        const message = document.createElement('span');
+        message.innerText = event.data;
+        document.body.appendChild(message);
+      };
+
+      sse.onclose = () => {
+        sse.close();
+        // history.push(responseText)
+        console.log('Connection was closed');
+      };
+
+      sse.onerror = (err) => {
+        sse.close();
+        // history.push(responseText)
+        console.log('Connection was closed by error');
+      };
+
+      // history.push(question)
+    };
+  </script>
+</html>
