@@ -1,30 +1,14 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Post,
-  Query,
-  Res,
-  Sse,
-} from '@nestjs/common';
+import { Controller, Get, Inject, Query, Res, Sse } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { BaseCallbackHandler } from 'langchain/callbacks';
 import { join } from 'path';
 import { Observable } from 'rxjs';
 import { LLMService } from 'src/llm/llm.service';
 import { Response } from 'express';
-import { ConfigService } from '@nestjs/config';
 
 @Controller('chat')
 export class ChatController {
-  private llmService: LLMService;
-  private cities: string[] = [];
-  constructor(
-    @Inject(ConfigService) private readonly configService: ConfigService,
-  ) {
-    this.llmService = new LLMService(configService);
-  }
+  constructor(@Inject(LLMService) private readonly llmService: LLMService) {}
 
   @Get()
   indexed(@Res() response: Response) {

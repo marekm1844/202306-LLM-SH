@@ -1,8 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IDocumentLoader } from './document-loader.interface';
 import { ConfluencePagesLoader } from 'langchain/document_loaders/web/confluence';
-import { Maybe, Result, ResultAsync } from 'typescript-functional-extensions';
-import { Document } from 'langchain/document';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

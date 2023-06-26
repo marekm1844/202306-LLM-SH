@@ -6,7 +6,6 @@ import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 @Injectable()
 export class VectorStoreRepository {
   constructor(
-    @Inject('ChromaDBVectorStore')
     private readonly chromaResult: Result<ChromaClient>,
     private readonly apiKey: string,
   ) {}
