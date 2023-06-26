@@ -5,50 +5,107 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat Bot Client</title>
+    <style>
+      body {
+        --primary-color: #2f77b1;
+        --secondary-color: #bfd9ed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      body * {
+        font-family: sans-serif;
+      }
+      .container {
+        display: flex;
+        gap: 24px;
+        padding: 60px;
+        min-width: 280px;
+        width: 100%;
+        max-width: 1280px;
+        border-radius: 20px;
+        background-color: var(--secondary-color);
+        box-shadow: -14px 14px 0 0 rgba(66, 68, 90, 1);
+        height: 50vh;
+        margin: 60px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          flex-direction: column;
+        }
+      }
+      .form {
+        display: flex;
+        gap: 12px;
+        flex-direction: column;
+        flex: 1;
+      }
+      .results {
+        flex: 2;
+      }
+      input {
+        padding: 8px 12px;
+        border: 1px solid gray;
+        border-radius: 6px;
+      }
+      .button {
+        border-radius: 6px;
+        background-color: var(--primary-color);
+        padding: 8px 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: white;
+      }
+    </style>
   </head>
-
   <body>
-    <input type="text" id="city" placeholder="Enter your topic here" />
-    <input type="text" id="month" placeholder="Enter your message here" />
-    <button onclick="handleSubmit()">submit</button>
+    <div class="container">
+      <div class="form">
+        <input type="text" id="question" placeholder="Enter your question " />
+        <!-- <input type="text" id="month" placeholder="Enter your message here" /> -->
+        <div class="button" onclick="handleSubmit()">submit</div>
+      </div>
+      <div class="results">Type in what you're looking for...</div>
+    </div>
   </body>
   <script type="text/javascript">
-    // const history = []
+    const history = [];
     let sse = null;
     const handleSubmit = () => {
       let responseText = '';
-      const city = document.getElementById('city').value;
-      const month = document.getElementById('month').value;
-      const url = `http://localhost:3000/chat/sse`;
+      const question = document.getElementById('question').value;
+      // const month = document.getElementById('month').value;
+      const url = `http://localhost:3000/chat/sse?&question=${question}&history=${history}`;
       if (sse) {
         sse.close();
       }
       sse = new EventSource(url);
-
       sse.onmessage = (event) => {
         if (event.data === '\n\n') {
           sse.close();
           return;
         }
         responseText += event.data;
+        const messageContainer = document.querySelector('.results');
         const message = document.createElement('span');
         message.innerText = event.data;
-        document.body.appendChild(message);
+        messageContainer.appendChild(message);
       };
-
       sse.onclose = () => {
         sse.close();
-        // history.push(responseText)
+        history.push(responseText);
         console.log('Connection was closed');
       };
-
       sse.onerror = (err) => {
         sse.close();
-        // history.push(responseText)
+        history.push(responseText);
         console.log('Connection was closed by error');
       };
-
-      // history.push(question)
+      history.push(question);
     };
   </script>
 </html>

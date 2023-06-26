@@ -1,10 +1,17 @@
 curl -H Accept:text/event-stream http://localhost:3000/chat/sse
 
-
-### test
-POST http://localhost:3000/chat/add HTTP/1.1
-content-type: application/json
+### Load Conflu page
+POST http://localhost:3000/document/load HTTP/1.1
+Content-Type: application/json
 
 {
-  "citi": "Warsaw"
+  "baseUrl": "https://startuphouse.atlassian.net/wiki",
+  "spaceKey": "SDH"
 }
+
+### ChromaDB
+GET http://localhost:8000/api/v1/collections HTTP/1.1
+
+### ChromaDB
+DELETE  http://localhost:8000/api/v1/collections/SDH HTTP/1.1
+

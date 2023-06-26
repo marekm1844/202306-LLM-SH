@@ -1,17 +1,29 @@
-import { Body, Controller, Get, Post, Res, Sse } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Query,
+  Res,
+  Sse,
+} from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { BaseCallbackHandler } from 'langchain/callbacks';
 import { join } from 'path';
 import { Observable } from 'rxjs';
 import { LLMService } from 'src/llm/llm.service';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('chat')
 export class ChatController {
   private llmService: LLMService;
   private cities: string[] = [];
-  constructor() {
-    this.llmService = new LLMService();
+  constructor(
+    @Inject(ConfigService) private readonly configService: ConfigService,
+  ) {
+    this.llmService = new LLMService(configService);
   }
 
   @Get()
@@ -22,8 +34,11 @@ export class ChatController {
   }
 
   @Sse('sse')
-  async sse(): Promise<Observable<string>> {
-    const chain = await this.llmService.initChain();
+  async sse(
+    @Query('question') question: string,
+    @Query('history') history: string[],
+  ): Promise<Observable<string>> {
+    const chain = await this.llmService.initChain('SDH');
 
     return new Observable<string>((subscriber) => {
       const handlers = BaseCallbackHandler.fromMethods({
@@ -34,8 +49,8 @@ export class ChatController {
       chain
         .call(
           {
-            city: 'London',
-            month: 'January',
+            question,
+            chat_history: history,
           },
           [handlers],
         )
@@ -46,11 +61,5 @@ export class ChatController {
           subscriber.complete();
         });
     });
-  }
-
-  @Post('add')
-  add(@Body('citi') citi: string) {
-    this.cities.push(citi);
-    return citi;
   }
 }
