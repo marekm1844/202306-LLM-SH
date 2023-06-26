@@ -1,8 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { Result } from 'typescript-functional-extensions';
 import { ChromaClient } from 'chromadb';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
-import { getProxyParams } from 'src/utils';
 
 @Injectable()
 export class VectorStoreRepository {
@@ -10,20 +9,20 @@ export class VectorStoreRepository {
     @Inject('ChromaDBVectorStore')
     private readonly chromaResult: Result<ChromaClient>,
     private readonly apiKey: string,
-    private readonly proxyPath: string,
-    private readonly enableProxy: boolean,
   ) {}
 
   createCollection(name: string) {
     return this.chromaResult.bind((chromaClient) =>
       Result.try(
-        async () =>
+        async () => {
           chromaClient.createCollection({
             name,
             embeddingFunction: {
               generate: (texts: string[]) => this.generateEmbedding(texts),
             },
-          }),
+          });
+          Logger.debug(`Created collection ${name}`);
+        },
         (error) => `Failed to create collection: ${error}`,
       ),
     );
@@ -53,13 +52,20 @@ export class VectorStoreRepository {
     );
   }
 
-  private async generateEmbedding(texts: string[]) {
-    const params = getProxyParams(
-      this.enableProxy,
-      this.proxyPath,
-      this.apiKey,
+  deleteCollection(name: string) {
+    return this.chromaResult.bind((chromaClient) =>
+      Result.try(
+        async () => {
+          chromaClient.deleteCollection({ name });
+          Logger.debug(`Deleted collection ${name}`);
+        },
+        (error) => `Failed to list collections: ${error}`,
+      ),
     );
-    const embedder = new OpenAIEmbeddings({}, params);
+  }
+
+  private async generateEmbedding(texts: string[]) {
+    const embedder = new OpenAIEmbeddings({ openAIApiKey: this.apiKey });
     return embedder.embedDocuments(texts);
   }
 }
