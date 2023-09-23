@@ -1,4 +1,4 @@
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Result } from 'typescript-functional-extensions';
 import { ChromaClient } from 'chromadb';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';

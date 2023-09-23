@@ -60,25 +60,43 @@
         cursor: pointer;
         color: white;
       }
+      .message {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        word-wrap: break-word;
+      }
+      .message_reposne {
+        background-color: violet;
+        color: white;
+        word-wrap: break-word;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="form">
         <input type="text" id="question" placeholder="Enter your question " />
-        <!-- <input type="text" id="month" placeholder="Enter your message here" /> -->
         <div class="button" onclick="handleSubmit()">submit</div>
       </div>
-      <div class="results">Type in what you're looking for...</div>
+      <div class="results">
+        <span id="welcome">Type in what you're looking for...</span>
+      </div>
     </div>
   </body>
   <script type="text/javascript">
     const history = [];
     let sse = null;
     const handleSubmit = () => {
+      const mc = document.getElementById('welcome');
+      if (mc) {
+        mc.remove();
+      }
       let responseText = '';
       const question = document.getElementById('question').value;
-      // const month = document.getElementById('month').value;
       const url = `http://localhost:3000/chat/sse?&question=${question}&history=${history}`;
       if (sse) {
         sse.close();
@@ -106,6 +124,11 @@
         console.log('Connection was closed by error');
       };
       history.push(question);
+      const messageContainer = document.querySelector('.results');
+      const userMessage = document.createElement('div');
+      userMessage.innerText = question;
+      userMessage.className = 'message';
+      messageContainer.appendChild(userMessage);
     };
   </script>
 </html>

@@ -1,17 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { Document } from 'langchain/document';
-import { ConfluenceLoaderService } from './confluance-loader.service';
 import { IDocumentLoader } from './document-loader.interface';
 
 @Injectable()
 export class DocumentLoaderService {
   private documentLoader: IDocumentLoader;
-
-  constructor(
-    @Inject(ConfluenceLoaderService)
-    private readonly confluanceLoaderService: ConfluenceLoaderService,
-  ) {}
 
   setDocumentLoader(loader: IDocumentLoader): void {
     this.documentLoader = loader;

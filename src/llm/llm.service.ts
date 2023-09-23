@@ -1,5 +1,4 @@
 import { LLMChain, OpenAI } from 'langchain';
-import { ChatOpenAI } from 'langchain/chat_models';
 import { QUESTION_PROMPT, SUMMARY_PROMPT } from './prompts';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -11,17 +10,10 @@ import { BufferMemory } from 'langchain/memory';
 @Injectable()
 export class LLMService {
   private model: OpenAI;
-  private chatModel: ChatOpenAI;
   constructor(
     @Inject(ConfigService) private readonly configService: ConfigService,
   ) {
     this.model = new OpenAI({
-      temperature: 0,
-      streaming: true,
-      modelName: 'gpt-3.5-turbo',
-    });
-
-    this.chatModel = new ChatOpenAI({
       temperature: 0,
       streaming: true,
       modelName: 'gpt-4',
